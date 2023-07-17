@@ -25,3 +25,45 @@ Ansible là một trong những công cụ quản lý cấu hình hiện đại,
 - Variable: Variable là các giá trị có thể thay đổi trong Ansible. Các biến có thể được sử dụng để định nghĩa thông tin động như tên máy chủ, cổng kết nối, đường dẫn file, và các giá trị khác. Các biến có thể được định nghĩa trong playbook, role, hoặc inventory.
 - Handler: Handler là một tác vụ được thực hiện dựa trên sự thay đổi trạng thái của máy chủ mục tiêu. Nó được sử dụng để thực hiện các hành động cần thiết sau khi tác vụ chính hoàn thành, chẳng hạn như khởi động lại dịch vụ hoặc tái khởi động máy chủ.
 ## V. Cài đặt
+### 1. Cài đặt Ansible:
+B1: Đưa PPA (kho lưu trữ gói cá nhân) của dự án chính thức vào danh sách nguồn của hệ thống:
+```
+sudo apt-add-repository ppa:ansible/ansible
+```
+Sau đó cập nhật gói hệ thống:
+```
+sudo apt update
+```
+B2: Sau khi cập nhật hệ thống xong thì cài ansible:
+```
+sudo apt install ansible
+```
+Vậy là xong bước cài Ansible
+Sau khi cài đặt Ansible thì chúng ta nên thiết lập khóa SSH:
+### 1. Thiết lập khóa SSH
+B1: Tạo một cặp khóa:
+```
+ssh-keygen
+```
+Sau khi màn hình hiển thị ra các lệnh thì ấn nút Enter để lưu cặp khóa vào .ssh/thư mục con trong thư mục chính của mình hoặc chỉ định một đường dẫn thay thế.
+Sau khi hoàn thành thì màn hình hiển thị như dưới là thành công:
+```
+Output
+Your identification has been saved in /your_home/.ssh/id_rsa
+Your public key has been saved in /your_home/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:/hk7MJ5n5aiqdfTVUZr+2Qt+qCiS7BIm5Iv0dxrc3ks user@host
+The key's randomart image is:
++---[RSA 3072]----+
+|                .|
+|               + |
+|              +  |
+| .           o . |
+|o       S   . o  |
+| + o. .oo. ..  .o|
+|o = oooooEo+ ...o|
+|.. o *o+=.*+o....|
+|    =+=ooB=o.... |
++----[SHA256]-----+
+```
+B2:  Sao chép khóa công khai vào máy chủ Ubuntu
