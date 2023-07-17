@@ -30,7 +30,7 @@ B1: Đưa PPA (kho lưu trữ gói cá nhân) của dự án chính thức vào 
 ```
 sudo apt-add-repository ppa:ansible/ansible
 ```
-Sau đó cập nhật gói hệ thống:
+- Sau đó cập nhật gói hệ thống:
 ```
 sudo apt update
 ```
@@ -46,8 +46,8 @@ B1: Tạo một cặp khóa:
 ```
 ssh-keygen
 ```
-Sau khi màn hình hiển thị ra các lệnh thì ấn nút Enter để lưu cặp khóa vào .ssh/thư mục con trong thư mục chính của mình hoặc chỉ định một đường dẫn thay thế.
-Sau khi hoàn thành thì màn hình hiển thị như dưới là thành công:
+- Sau khi màn hình hiển thị ra các lệnh thì ấn nút Enter để lưu cặp khóa vào .ssh/thư mục con trong thư mục chính của mình hoặc chỉ định một đường dẫn thay thế.
+- Sau khi hoàn thành thì màn hình hiển thị như dưới là thành công:
 ```
 Output
 Your identification has been saved in /your_home/.ssh/id_rsa
@@ -68,3 +68,55 @@ The key's randomart image is:
 +----[SHA256]-----+
 ```
 B2:  Sao chép khóa công khai vào máy chủ Ubuntu
+- Dùng lệnh `ssh-copy-id username@remote_host` để chỉ định máy chủ từ xa muốn kết nối và tài khoản người dùng có quyền truy cập SSH dựa trên mật khẩu.
+- Tiếp theo chúng ta chọn yes để xác nhận kết nối. Sau đó ta nhập mật khẩu của máy cần kết nối.
+Sau khi nhập mật khẩu, nội dung id_rsa.pub khóa sẽ được sao chép vào cuối tệp authorized_keys của tài khoản người dùng từ xa. Thế là xong.
+
+### 3. Thiết lập máy
+B1: Chỉnh sửa tệp host của ansible: `sudo nano /etc/ansible/hosts`
+- Thêm vào cuối tệp đoạn văn bản sau:
+```
+[servers]
+server1 ansible_host=ip1
+server2 ansible_host=ip2
+server3 ansible_host=ip3
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+```
+- Lưu tập tin và thoát.
+B2: Kiểm tra kho: `ansible-inventory --list -y`
+- Màn hình khi đấy sẽ hiển thị như sau:
+```
+all:
+  children:
+    servers:
+      hosts:
+        server1:
+          ansible_host: ip1
+          ansible_python_interpreter: /usr/bin/python3
+        server2:
+          ansible_host: ip2
+          ansible_python_interpreter: /usr/bin/python3
+        server3:
+          ansible_host: ip3
+          ansible_python_interpreter: /usr/bin/python3
+    ungrouped: {}
+```
+B3: Kiểm tra kết nối: `ansible all -m ping -u tk` với tk là tài khoản trên máy kết nối.
+- Nếu màn hình hiển thị như dưới là thành công:
+```
+server1 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+server2 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+server3 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+```
+Sau khi nhận được "pong"phản hồi từ máy chủ, điều đó có nghĩa là máy chủ đã sẵn sàng chạy các lệnh và playbook Ansible trên máy chủ đó.
