@@ -39,6 +39,7 @@ B2: Sau khi cập nhật hệ thống xong thì cài ansible:
 sudo apt install ansible
 ```
 Vậy là xong bước cài Ansible
+
 Sau khi cài đặt Ansible thì chúng ta nên thiết lập khóa SSH:
 ### 1. Thiết lập khóa SSH
 B1: Tạo một cặp khóa:
